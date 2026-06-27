@@ -145,7 +145,7 @@ void priority_queue <T, Container, Compare> :: push(T && t)
 template <class T, class Container, class Compare>
 bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
 {
-   bool changed = false;
+   /*bool changed = false;
    size_t currentIndex = indexHeap;
    
    while ((2 * currentIndex + 1) < container.size())
@@ -154,7 +154,7 @@ bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
       size_t rightChild = targetChild + 1;
       
       if (rightChild < )
-   }
+   }*/
    return false;
 }
 
