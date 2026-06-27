@@ -91,7 +91,7 @@ public:
    }
    bool empty() const 
    { 
-      return false;  
+      return container.size() == 0;
    }
    
 private:
@@ -145,17 +145,32 @@ void priority_queue <T, Container, Compare> :: push(T && t)
 template <class T, class Container, class Compare>
 bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
 {
-   /*bool changed = false;
-   size_t currentIndex = indexHeap;
+   if (indexHeap == 0 || indexHeap > container.size())
+      return false;
+   
+   bool changed = false;
+   size_t currentIndex = indexHeap - 1;
    
    while ((2 * currentIndex + 1) < container.size())
    {
       size_t targetChild = 2 * currentIndex + 1;
       size_t rightChild = targetChild + 1;
       
-      if (rightChild < )
-   }*/
-   return false;
+      if (rightChild < container.size() && compare(container[targetChild], container[rightChild]))
+         targetChild = rightChild;
+      
+      if (compare(container[currentIndex], container[targetChild]))
+      {
+         using std::swap;
+         swap(container[currentIndex], container[targetChild]);
+         
+         changed = true;
+         currentIndex = targetChild;
+      }
+      else
+         break;
+   }
+   return changed;
 }
 
 /************************************************
@@ -165,6 +180,12 @@ bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> ::heapify()
 {
+   size_t i = container.size()/2;
+   while (i > 0)
+   {
+      percolateDown(i);
+      i--;
+   }
 }
 
 /************************************************
