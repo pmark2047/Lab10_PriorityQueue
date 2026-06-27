@@ -55,7 +55,7 @@ public:
    priority_queue(priority_queue && rhs, const Compare & c = Compare())  
    {
        container = std::move(rhs.container);
-       compare = c;
+       compare = std::move(rhs.compare);
    }
    template <class Iterator>
    priority_queue(Iterator first, Iterator last, const Compare & c = Compare()) 
@@ -66,9 +66,15 @@ public:
    }
    explicit priority_queue (const Compare& c, Container && rhs) 
    {
+       compare = c;
+       container = std::move(rhs);
+       heapify();
    }
    explicit priority_queue (const Compare& c, Container & rhs) 
    {
+       container = rhs;
+       compare = c;
+       heapify();
    }
   ~priority_queue() 
    {
@@ -119,7 +125,12 @@ private:
 template <class T, class Container, class Compare>
 const T & priority_queue <T, Container, Compare> :: top() const
 {
-   return *(new T);
+    if (empty())
+        {
+            throw std::out_of_range("std:out_of_range");
+        }
+        
+        return container.front();
 }
 
 /**********************************************
@@ -129,6 +140,14 @@ const T & priority_queue <T, Container, Compare> :: top() const
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> :: pop()
 {
+    if (empty())
+        return;
+    else
+    {
+        swap(container.front(), container.back());
+        container.pop_back();
+        percolateDown(1);
+    }
 }
 
 /*****************************************
@@ -138,10 +157,18 @@ void priority_queue <T, Container, Compare> :: pop()
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> :: push(const T & t)
 {
+    container.push_back(t);
+    size_t index = container.size() / 2;
+    while (index && percolateDown(index))
+        index /= 2;
 }
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> :: push(T && t)
 {
+    container.push_back(std::move(t));
+    size_t index = container.size() / 2;
+    while (index && percolateDown(index))
+        index /= 2;
 }
 
 /************************************************
@@ -204,6 +231,8 @@ template <class T, class Container, class Compare>
 inline void swap(custom::priority_queue <T, Container, Compare> & lhs,
                  custom::priority_queue <T, Container, Compare> & rhs)
 {
+    std::swap(lhs.container, rhs.container);
+    std::swap(lhs.compare, rhs.compare);
 }
 
-}; 
+};

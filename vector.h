@@ -438,7 +438,7 @@ void vector <T, A> :: shrink_to_fit()
    if (numCapacity == numElements)
       return;
 
-   // If there are elements to move   
+   // If there are elements to move
    T* pNew = nullptr;
    if (numElements != 0)
    {
