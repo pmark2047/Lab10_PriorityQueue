@@ -87,7 +87,7 @@ public:
    //
    size_t size()  const 
    { 
-      return 99;   
+      return container.size();
    }
    bool empty() const 
    { 
@@ -145,6 +145,16 @@ void priority_queue <T, Container, Compare> :: push(T && t)
 template <class T, class Container, class Compare>
 bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
 {
+   bool changed = false;
+   size_t currentIndex = indexHeap;
+   
+   while ((2 * currentIndex + 1) < container.size())
+   {
+      size_t targetChild = 2 * currentIndex + 1;
+      size_t rightChild = targetChild + 1;
+      
+      if (rightChild < )
+   }
    return false;
 }
 
